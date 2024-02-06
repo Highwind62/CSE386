@@ -88,7 +88,7 @@ bool approximatelyZero(double a) {
  */
 
 double normalizeDegrees(double degrees) {
-	return 0;
+	return glm::mod(degrees, 360.0);
 }
 
 /**
@@ -106,8 +106,8 @@ double normalizeDegrees(double degrees) {
  */
 
 double normalizeRadians(double rads) {
-	/* CSE 386 - todo  */
-	return 0;
+	return glm::mod(rads, 2*PI);
+	//return 0;
 }
 
 /**
@@ -121,7 +121,7 @@ double normalizeRadians(double rads) {
 
 double rad2deg(double rads) {
 	/* CSE 386 - todo  */
-	return 0;
+	return rads * 180 / PI;
 }
 
 /**
@@ -135,7 +135,7 @@ double rad2deg(double rads) {
 
 double deg2rad(double degs) {
 	/* CSE 386 - todo  */
-	return 0;
+	return degs * PI / 180;
 }
 
 /**
@@ -150,7 +150,7 @@ double deg2rad(double degs) {
 
 double min(double A, double B, double C) {
 	/* CSE 386 - todo  */
-	return 0;
+	return glm::min(glm::min(A, B), C);
 }
 
 /**
@@ -165,7 +165,7 @@ double min(double A, double B, double C) {
 
 double max(double A, double B, double C) {
 	/* CSE 386 - todo  */
-	return 0;
+	return glm::max(glm::max(A, B), C);
 }
 
 /**
@@ -184,7 +184,7 @@ double max(double A, double B, double C) {
 
 double distanceFromOrigin(double x, double y) {
 	/* CSE 386 - todo  */
-	return 0;
+	return glm::sqrt(glm::pow(x, 2) + glm::pow(y, 2));
 }
 
 /**
@@ -206,7 +206,7 @@ double distanceFromOrigin(double x, double y) {
 
 double distanceBetween(double x1, double y1, double x2, double y2) {
 	/* CSE 386 - todo  */
-	return 0;
+	return glm::sqrt(glm::pow(x1 - x2, 2) + glm::pow(y1 - y2, 2));
 }
 
 /**
@@ -224,7 +224,14 @@ double distanceBetween(double x1, double y1, double x2, double y2) {
 
 double areaOfTriangle(double a, double b, double c) {
 	/* CSE 386 - todo  */
-	return 0;
+	if (min(a, b, c) <= 0)
+		return -1;
+	double s = (a + b + c) / 2.0;
+	double areasqr = s * (s - a) * (s - b) * (s - c);
+	if (areasqr <= 0)
+		return -1.0;
+	else
+		return glm::sqrt(areasqr);
 }
 
 /**
@@ -243,7 +250,10 @@ double areaOfTriangle(double a, double b, double c) {
 
 double areaOfTriangle(double x1, double y1, double x2, double y2, double x3, double y3) {
 	/* CSE 386 - todo  */
-	return 0;
+	double a = distanceBetween(x1, y1, x2, y2);
+	double b = distanceBetween(x2, y2, x3, y3);
+	double c = distanceBetween(x1, y1, x3, y3);
+	return areaOfTriangle(a, b, c);
 }
 
 /**
