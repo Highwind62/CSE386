@@ -42,6 +42,8 @@ int main(int argc, char* argv[]) {
 	cout << "after swap: " << a << " " << b << endl;
 
 	cout << "approximatelyZero: " << approximatelyZero(0.0000001) << endl;
+	cout << "approximatelyZero: " << approximatelyZero(0) << endl;
+	cout << "approximatelyZero: " << approximatelyZero(0.1) << endl;
 
 	cout << normalizeDegrees(0) << endl;
 	cout << normalizeDegrees(1.75) << endl;
@@ -50,7 +52,7 @@ int main(int argc, char* argv[]) {
 
 	cout << normalizeRadians(0) << endl;
 	cout << normalizeRadians(1) << endl;
-	cout << normalizeRadians(3 * PI) << endl;
+	cout << normalizeRadians(2 * PI) << endl;
 	cout << normalizeRadians(-31 * PI) << endl;
 
 	cout << rad2deg(3 * PI / 4) << endl;
@@ -93,6 +95,40 @@ int main(int argc, char* argv[]) {
 	cout << areaOfTriangle(1, 1, 5, 4, 10, 2) << endl;
 	cout << areaOfTriangle(2, 9, 5, 3, 10, 6) << endl;
 	cout << areaOfTriangle(-2, 3, 4, -1, -3, -4) << endl;
+
+	cout << "Points on Unit Circle" << endl;
+	double x, y = 0;
+	pointOnUnitCircle(0.19 * PI, x, y);
+	cout << x << ' ' << y << endl;
+	pointOnUnitCircle(2 * PI, x, y);
+	cout << x << ' ' << y << endl;
+	pointOnUnitCircle(1 * PI, x, y);
+	cout << x << ' ' << y << endl;
+	pointOnUnitCircle(754, x, y);
+	cout << x << ' ' << y << endl;
+	pointOnUnitCircle(1.22 * PI, x, y);
+	cout << x << ' ' << y << endl;
+
+	cout << "Points on Circle" << endl;
+	dvec2 ptr1(3, 4);
+	cout << pointOnCircle(ptr1, 7, 34) <<  endl;
+	dvec2 ptr2(-2, -3);
+	cout << pointOnCircle(ptr2, 4.5, -4) << endl;
+
+	cout << "Direction In Radians" << endl;
+	cout << directionInRadians(dvec2(0, 0), dvec2(2, 2)) << endl;
+	cout << directionInRadians(dvec2(2, 10), dvec2(3, 11)) << endl;
+	cout << directionInRadians(dvec2(2, 2), dvec2(2, 0)) << endl;
+	cout << directionInRadians(dvec2(1, -1), dvec2(1.3420, -1.93969)) << endl;
+	cout << directionInRadians(dvec2(2, 2)) << endl;
+	cout << directionInRadians(dvec2(0, -2)) << endl;
+	cout << directionInRadians(0, 0, 2, 2) << endl;
+	cout << directionInRadians(2, 10, 3, 11) << endl;
+	cout << directionInRadians(2, 2, 2, 0) << endl;
+	cout << directionInRadians(-10, 5, 15, -5) << endl;
+	cout << directionInRadians(dvec2(- 10, 5), dvec2(15, -5)) << endl;
+	cout << directionInRadians(-21.56, 3.70, 9.92, -15.40) << endl;
+	cout << directionInRadians(9.92, -15.40 , -21.56, 3.70) << endl;
 	/*
 	graphicsInit(argc, argv, __FILE__);
 

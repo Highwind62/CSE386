@@ -267,7 +267,8 @@ double areaOfTriangle(double x1, double y1, double x2, double y2, double x3, dou
 
 void pointOnUnitCircle(double angleRads, double& x, double& y) {
 	/* CSE 386 - todo  */
-	x = y = 0;
+	x = glm::cos(angleRads);
+	y = glm::sin(angleRads);
 }
 
 /**
@@ -282,7 +283,10 @@ void pointOnUnitCircle(double angleRads, double& x, double& y) {
 
 dvec2 pointOnCircle(const dvec2& center, double R, double angleRads) {
 	/* CSE 386 - todo  */
-	return dvec2(0, 0);;
+	glm::dvec2 point;
+	point.x = R * glm::cos(angleRads) + center.x;
+	point.y = R * glm::sin(angleRads) + center.y;
+	return point;
 }
 
 /**
@@ -302,7 +306,9 @@ dvec2 pointOnCircle(const dvec2& center, double R, double angleRads) {
 
 double directionInRadians(const dvec2& referencePt, const dvec2& targetPt) {
 	/* CSE 386 - todo  */
-	return 0;
+	double x = targetPt.x - referencePt.x;
+	double y = targetPt.y - referencePt.y;
+	return normalizeRadians(glm::atan(y, x));
 }
 
 /**
@@ -317,7 +323,8 @@ double directionInRadians(const dvec2& referencePt, const dvec2& targetPt) {
 
 double directionInRadians(const dvec2& targetPt) {
 	/* CSE 386 - todo  */
-	return 0;
+	dvec2 origin(0, 0);
+	return directionInRadians(origin, targetPt);
 }
 
 /**
@@ -336,7 +343,9 @@ double directionInRadians(const dvec2& targetPt) {
 
 double directionInRadians(double x1, double y1, double x2,  double y2) {
 	/* CSE 386 - todo  */
-	return 0.0;
+	dvec2 ptr1(x1, y1);
+	dvec2 ptr2(x2, y2);
+	return directionInRadians(ptr1, ptr2);
 }
 
 /**
