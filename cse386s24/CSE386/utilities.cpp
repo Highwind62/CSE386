@@ -361,7 +361,7 @@ double directionInRadians(double x1, double y1, double x2,  double y2) {
 
 double map(double x, double fromLo, double fromHi, double toLow, double toHigh) {
 	/* CSE 386 - todo  */
-	return 0;
+	return (x - fromLo) * (toHigh - toLow) / (fromHi - fromLo) + toLow;
 }
 
 /**
@@ -383,9 +383,19 @@ double map(double x, double fromLo, double fromHi, double toLow, double toHigh) 
 vector<double> quadratic(double A, double B, double C) {
 	/* CSE 386 - todo  */
 	vector<double> result;	// put only the roots in here
-	result.push_back(0);
-	result.push_back(1);
-	return result;
+	double discriminant = B * B - 4 * A * C;
+	if (discriminant < 0) {
+		return result;
+	}
+	else if (discriminant == 0) {
+		result.push_back(-B / (2 * A));
+		return result;
+	}
+	else {
+		result.push_back(( - B - glm::sqrt(discriminant)) / (2 * A));
+		result.push_back((-B + glm::sqrt(discriminant)) / (2 * A));
+		return result;
+	}
 }
 
 /**
@@ -423,9 +433,22 @@ vector<double> quadratic(double A, double B, double C) {
 int quadratic(double A, double B, double C, double roots[2]) {
 	/* CSE 386 - todo  */
 	int rootCnt = 0;
-	roots[0] = 1;
-	roots[1] = 2;
-	return 2;
+	double discriminant = B * B - 4 * A * C;
+	if (discriminant < 0) {
+		rootCnt = 0;
+		return rootCnt;
+	}
+	else if (discriminant == 0) {
+		rootCnt = 1;
+		roots[0] = (-B / (2 * A));
+		return rootCnt;
+	}
+	else {
+		roots[0] = (-B - glm::sqrt(discriminant)) / (2 * A);
+		roots[1] = (-B + glm::sqrt(discriminant)) / (2 * A);
+		rootCnt = 2;
+		return rootCnt;
+	}
 }
 
 /**

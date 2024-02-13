@@ -129,6 +129,33 @@ int main(int argc, char* argv[]) {
 	cout << directionInRadians(dvec2(- 10, 5), dvec2(15, -5)) << endl;
 	cout << directionInRadians(-21.56, 3.70, 9.92, -15.40) << endl;
 	cout << directionInRadians(9.92, -15.40 , -21.56, 3.70) << endl;
+
+	cout << "Mapping" << endl;
+	cout << map(2, 0, 5, 10, 11) << endl;
+	cout << map(0, -10, 10, 0, 100) << endl;
+
+	cout << "Quadratic Equation" << endl;
+	cout << quadratic(11.11, -12.678, 0.5) << endl;
+	cout << quadratic(2, -3.5, 0.5) << endl;
+	cout << quadratic(1, -5, 6) << endl;
+
+	double roots[2];
+	int numRoots = quadratic(1, -4, 14, roots);
+	if (numRoots == 0) {
+		cout << "There are no real roots" << endl;
+	}
+	else if (numRoots == 1) {
+		cout << "Only one root: " << roots[0] << endl;
+	}
+	else if (numRoots == 2) {
+		if (roots[0] > roots[1])
+			cout << "Something is wrong. This should not happen" << endl;
+		else
+			cout << "Two roots: " << roots[0] << " and " << roots[1] << endl;
+	}
+	else {
+		cout << "Something is wrong. This should not happen" << endl;
+	}
 	/*
 	graphicsInit(argc, argv, __FILE__);
 
