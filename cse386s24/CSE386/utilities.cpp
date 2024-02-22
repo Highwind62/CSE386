@@ -206,7 +206,7 @@ double distanceFromOrigin(double x, double y) {
 
 double distanceBetween(double x1, double y1, double x2, double y2) {
 	/* CSE 386 - todo  */
-	return glm::sqrt(glm::pow(x1 - x2, 2) + glm::pow(y1 - y2, 2));
+	return glm::distance(dvec2(x1, y1), dvec2(x2, y2));
 }
 
 /**
@@ -392,8 +392,16 @@ vector<double> quadratic(double A, double B, double C) {
 		return result;
 	}
 	else {
-		result.push_back(( - B - glm::sqrt(discriminant)) / (2 * A));
-		result.push_back((-B + glm::sqrt(discriminant)) / (2 * A));
+		double x1 = (-B - glm::sqrt(discriminant)) / (2 * A);
+		double x2 = (-B + glm::sqrt(discriminant)) / (2 * A);
+		if (x1 < x2) {
+			result.push_back(x1);
+			result.push_back(x2);
+		}
+		else {
+			result.push_back(x2);
+			result.push_back(x1);
+		}
 		return result;
 	}
 }
@@ -444,9 +452,17 @@ int quadratic(double A, double B, double C, double roots[2]) {
 		return rootCnt;
 	}
 	else {
-		roots[0] = (-B - glm::sqrt(discriminant)) / (2 * A);
-		roots[1] = (-B + glm::sqrt(discriminant)) / (2 * A);
 		rootCnt = 2;
+		double x1 = (-B - glm::sqrt(discriminant)) / (2 * A);
+		double x2 = (-B + glm::sqrt(discriminant)) / (2 * A);
+		if (x1 < x2) {
+			roots[0] = x1;
+			roots[1] = x2;
+		}
+		else {
+			roots[1] = x1;
+			roots[0] = x2;
+		}
 		return rootCnt;
 	}
 }
@@ -460,7 +476,8 @@ int quadratic(double A, double B, double C, double roots[2]) {
 
 dvec2 doubleIt(const dvec2& V) {
 	/* CSE 386 - todo  */
-	return dvec2(0, 0);
+	dvec2 result(2 * V.x, 2 * V.y);
+	return result;
 }
 
 /**
@@ -474,7 +491,8 @@ dvec2 doubleIt(const dvec2& V) {
 
 dvec3 myNormalize(const dvec3& V) {
 	/* CSE 386 - todo  */
-	return V;
+	dvec3 result(V.x / glm::length(V), V.y / glm::length(V), V.z / glm::length(V));
+	return result;
 }
 
 /**
@@ -489,7 +507,7 @@ two vectors is approximatelyZero().
 
 bool isOrthogonal(const dvec3& a, const dvec3& b) {
 	/* CSE 386 - todo  */
-	return false;
+	return approximatelyZero(glm::dot(a, b));
 }
 
 /**
@@ -502,7 +520,7 @@ bool isOrthogonal(const dvec3& a, const dvec3& b) {
 */
 
 bool formAcuteAngle(const dvec3& a, const dvec3& b) {
-	return false; 0;
+	return glm::dot(a, b) > 0;
 }
 
 /**
@@ -519,7 +537,7 @@ bool formAcuteAngle(const dvec3& a, const dvec3& b) {
 
 double cosBetween(const dvec2& v1, const dvec2& v2) {
 	/* CSE 386 - todo  */
-	return 0;
+	return glm::dot(v1, v2) / (glm::length(v1) * glm::length(v2));
 }
 
 /**
@@ -532,7 +550,7 @@ double cosBetween(const dvec2& v1, const dvec2& v2) {
 
 double cosBetween(const dvec3& v1, const dvec3& v2) {
 	/* CSE 386 - todo  */
-	return 0;
+	return glm::dot(v1, v2) / (glm::length(v1) * glm::length(v2));
 }
 
 /**
@@ -546,7 +564,7 @@ double cosBetween(const dvec3& v1, const dvec3& v2) {
 double cosBetween(const dvec4& v1, const dvec4& v2) {
 	/* CSE 386 - todo  */
 	double cos = glm::dot(v1, v2) / (glm::length(v1) * glm::length(v2));
-	return 0;
+	return cos;
 }
 
 /**
@@ -562,7 +580,7 @@ double cosBetween(const dvec4& v1, const dvec4& v2) {
 
 double areaOfParallelogram(const dvec3& v1, const dvec3& v2) {
 	/* CSE 386 - todo  */
-	return 0;
+	return glm::length(glm::cross(v1, v2));
 }
 
 /**
@@ -579,7 +597,9 @@ double areaOfParallelogram(const dvec3& v1, const dvec3& v2) {
 
 double areaOfTriangle(const dvec3& pt1, const dvec3& pt2, const dvec3& pt3) {
 	/* CSE 386 - todo  */
-	return 0;
+	dvec3 v1 = pt2 - pt1;
+	dvec3 v2 = pt3 - pt1;
+	return areaOfParallelogram(v1, v2) / 2;
 }
 
 /**
@@ -592,7 +612,7 @@ double areaOfTriangle(const dvec3& pt1, const dvec3& pt2, const dvec3& pt3) {
 
 dvec3 pointingVector(const dvec3& pt1, const dvec3& pt2) {
 	/* CSE 386 - todo  */
-	return dvec3(0, 0, 0);
+	return myNormalize(pt2 - pt1);
 }
 
 /**

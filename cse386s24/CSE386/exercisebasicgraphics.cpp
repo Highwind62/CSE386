@@ -135,12 +135,19 @@ int main(int argc, char* argv[]) {
 	cout << map(0, -10, 10, 0, 100) << endl;
 
 	cout << "Quadratic Equation" << endl;
-	cout << quadratic(11.11, -12.678, 0.5) << endl;
-	cout << quadratic(2, -3.5, 0.5) << endl;
-	cout << quadratic(1, -5, 6) << endl;
+	cout << quadratic(1.500000, 5.20000000, 0.500000000) << endl;
+	cout << quadratic(-0.1, 0.2, 0.5) << endl;
+	cout << quadratic(-1.5, 3, 3) << endl;
+	cout << quadratic(3, 6, 3) << endl;
+	cout << quadratic(-1, 2, 5) << endl;
+	cout << quadratic(1, 2, 1) << endl;
+	cout << quadratic(1, -2, 1) << endl;
+	cout << quadratic(3, 4, 1) << endl;
+	cout << quadratic(1, 4, 3) << endl;
+	cout << quadratic(-3, 4, -1) << endl;
 
 	double roots[2];
-	int numRoots = quadratic(1, -4, 14, roots);
+	int numRoots = quadratic(-1, 2, 5, roots);
 	if (numRoots == 0) {
 		cout << "There are no real roots" << endl;
 	}
@@ -156,6 +163,45 @@ int main(int argc, char* argv[]) {
 	else {
 		cout << "Something is wrong. This should not happen" << endl;
 	}
+
+	cout << "Double It" << endl;
+	cout << doubleIt(dvec2(1.8, 0)) << endl;
+
+	cout << "My Normalize" << endl;
+	cout << myNormalize(dvec3(4.2, 6.5, 7.12)) << endl;
+	cout << myNormalize(dvec3(1, 1, 1)) << endl;
+	cout << myNormalize(dvec3(-3, -3, -3)) << endl;
+
+	cout << "Is Orthogonal" << endl;
+	cout << isOrthogonal(dvec3(1, 0, 0), dvec3(0, 1, 0)) << endl;
+	cout << isOrthogonal(dvec3(1, 2, -1), dvec3(-2, 1, 0)) << endl;
+	cout << isOrthogonal(dvec3(-2, -1, -3), dvec3(1, 1, -4)) << endl;
+
+	cout << "Is Acute Angle" << endl;
+	cout << formAcuteAngle(dvec3(1, 0, 0), dvec3(0, 1, 0)) << endl;
+	cout << formAcuteAngle(dvec3(1, 2, -1), dvec3(-2, 1, 0)) << endl;
+	cout << formAcuteAngle(dvec3(-2, -1, -3), dvec3(1, 1, -4)) << endl;
+
+	cout << "Cosine Between" << endl;
+	cout << cosBetween(dvec2(1.0, 0.0), dvec2(1.0, 0.0)) << endl;
+	cout << cosBetween(dvec2(1.0, 0.0), dvec2(1.0, 1.0)) << endl;
+	cout << cosBetween(dvec2(-1.0, glm::sqrt(3.0)), dvec2(-1.0, 0.0)) << endl;
+	cout << cosBetween(dvec2(-1.0, glm::sqrt(3.0)), dvec2(1.0, glm::sqrt(3.0))) << endl;
+	cout << cosBetween(dvec3(1, 3, 8), dvec3(6, -1, -9)) << endl;
+	cout << cosBetween(dvec4(22, 13, -44, 12.8), dvec4(-55, 108, 99, 45.5)) << endl;
+
+	cout << "Area Of Parallelogram" << endl;
+	cout << areaOfParallelogram(dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)) << endl;
+	cout << areaOfParallelogram(dvec3(1.0, 1.0, 1.0), dvec3(1.0, 0.0, 1.0)) << endl;
+	cout << areaOfParallelogram(dvec3(-12, 19, 37), dvec3(42.8, -128.7, 1.6)) << endl;
+
+	cout << "Area Of Triangle" << endl;
+	cout << areaOfTriangle(dvec3(0.0, 0.0, 0.0), dvec3(1.0, 0.0, 0.0), dvec3(0.0, 1.0, 0.0)) << endl;
+	cout << areaOfTriangle(dvec3(-10.0, -10.0, -10.0), dvec3(-11.0, -10.0, -10.0), dvec3(-10.0, -11.0, -10.0)) << endl;
+	cout << areaOfTriangle(dvec3(-12.1, -112, 87), dvec3(-11.0, 12, 9), dvec3(-10.0, 111, 0)) << endl;
+
+	cout << "Pointing Vector" << endl;
+	cout << pointingVector(dvec3(0.0000000000, - 0.4142135624, 2.0000000000), dvec3(1.0000000000, 1.0000000000, 1.0000000000)) << endl;
 	/*
 	graphicsInit(argc, argv, __FILE__);
 
