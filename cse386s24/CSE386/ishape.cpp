@@ -162,7 +162,29 @@ IDisk::IDisk(const dvec3& pos, const dvec3& normal, double rad)
 
 void IDisk::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 	/* CSE 386 - todo  */
-	hit.t = FLT_MAX;
+	double num = glm::dot(center - ray.origin, n);
+	double denom = glm::dot(ray.dir, n);
+
+	if (denom == 0) {
+		hit.t = FLT_MAX;
+	}
+	else {
+		double t = num / denom;
+		if (t < 0) {
+			hit.t = FLT_MAX;
+		}
+		else {
+			dvec3 intersection = ray.origin + t * ray.dir;
+			if (glm::distance(intersection, center) > radius) {
+				hit.t = FLT_MAX;
+			}
+			else {
+				hit.t = t;
+				hit.interceptPt = intersection;
+				hit.normal = n;
+			}
+		}
+	}
 }
 
 /**
@@ -389,9 +411,23 @@ bool IPlane::onFrontSide(const dvec3& point) const {
 
 void IPlane::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 	/* CSE 386 - todo  */
-	hit.t = FLT_MAX;
-	hit.interceptPt = ORIGIN3D;
-	hit.normal = Y_AXIS;
+	double num = glm::dot(a - ray.origin, n);
+	double denom = glm::dot(ray.dir, n);
+
+	if (denom == 0) {
+		hit.t = FLT_MAX;
+	}
+	else {
+		double t = num / denom;
+		if (t < 0) {
+			hit.t = FLT_MAX;
+		}
+		else {
+			hit.t = t;
+			hit.interceptPt = ray.origin + t * ray.dir;
+			hit.normal = n;
+		}
+	}
 }
 
 /**
