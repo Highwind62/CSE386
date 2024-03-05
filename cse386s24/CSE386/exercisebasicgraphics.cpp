@@ -202,6 +202,8 @@ int main(int argc, char* argv[]) {
 
 	cout << "Pointing Vector" << endl;
 	cout << pointingVector(dvec3(0.0000000000, - 0.4142135624, 2.0000000000), dvec3(1.0000000000, 1.0000000000, 1.0000000000)) << endl;
+
+	cout << glm::degrees(glm::atan(-1.0, 1.0)) << endl;
 	/*
 	graphicsInit(argc, argv, __FILE__);
 
