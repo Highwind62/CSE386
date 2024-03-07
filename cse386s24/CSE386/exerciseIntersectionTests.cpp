@@ -13,20 +13,28 @@ void checkEm(const char *name, const IShape& shape) {
 	Ray ray1(dvec3(0, 0, 0), glm::normalize(dvec3(0, 0.5, -1)));	// Viewing rays are normalized
 	Ray ray2(dvec3(0, 0, 0), glm::normalize(dvec3(0, 0, -1)));
 	Ray ray3(dvec3(0, 0, 0), dvec3(0, -0.5, -1));
+	Ray ray4(dvec3(10, 0, 2), dvec3(-1 / sqrt(3), -1 / sqrt(3), -1 / sqrt(3)));
+	Ray ray5(dvec3(0, 0, 0), dvec3(1 / sqrt(3), 1 / sqrt(3), 1 / sqrt(3)));
 
 	HitRecord hit1;
 	HitRecord hit2;
 	HitRecord hit3;
+	HitRecord hit4;
+	HitRecord hit5;
 
 	shape.findClosestIntersection(ray1, hit1);
 	shape.findClosestIntersection(ray2, hit2);
 	shape.findClosestIntersection(ray3, hit3);
+	shape.findClosestIntersection(ray4, hit4);
+	shape.findClosestIntersection(ray5, hit5);
 
 	cout << name << endl;
 	cout << "==============" << endl;
 	displayHitRecord(hit1);
 	displayHitRecord(hit2);
 	displayHitRecord(hit3);
+	displayHitRecord(hit4);
+	displayHitRecord(hit5);
 	cout << endl;
 }
 
@@ -36,7 +44,8 @@ int main(int argc, char* argv[]) {
 	checkEm("Sphere", ISphere(dvec3(0.0, 0, -1.0), 0.75));
 	checkEm("Disk1", IDisk(dvec3(0, 0, -1), dvec3(0, 0, 1), 1.0));
 	checkEm("Disk2", IDisk(dvec3(0, 0, -10), dvec3(0, 0, 1), 1.0));
-
+	checkEm("Plane2", IPlane(dvec3(1, 2, 3), dvec3(-1/sqrt(3), -1 / sqrt(3), -1 / sqrt(3))));
+	checkEm("Sphere2", ISphere(dvec3(2, 1, 2), 1.0));
 	return 0;
 }
 /*
