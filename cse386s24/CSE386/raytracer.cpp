@@ -53,6 +53,9 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 				color C = hit.material.diffuse;
 				frameBuffer.setColor(x, y, C);
 			}
+			else {
+				frameBuffer.setColor(x, y, paleGreen);
+			}
 			frameBuffer.showAxes(x, y, ray, 0.25);			// Displays R/x, G/y, B/z axes
 		}
 	}
