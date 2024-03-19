@@ -813,3 +813,44 @@ void ICylinderY::getTexCoords(const dvec3& pt, double& u, double& v) const {
 IEllipsoid::IEllipsoid(const dvec3& position, const dvec3& sz)
 	: IQuadricSurface(QuadricParameters::ellipsoidQParams(sz), position) {
 }
+
+/**
+* @fnITriangle::ITriangle(const dvec3 &A, const dvec3 &B, const dvec3 &C)
+* @briefConstructs and implicit representation of a triangle, given three vertices
+* presented in counterclockwise order.
+* @paramA First vertex.
+* @paramB Second vertex.
+* @paramC Third vertex.
+*/
+
+ITriangle::ITriangle(const dvec3& A, const dvec3& B, const dvec3& C)
+	: IShape(), a(A), b(B), c(C) {
+}
+
+/**
+* @fn void ITriangle::findClosestIntersection(const Ray &ray, HitRecord &hit) const
+* @brief Searches for the nearest intersection
+* @param ray The ray.
+* @param [in,out] hitHit record.
+*/
+
+void ITriangle::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
+	dvec3 n = normalFrom3Points(a, b, c);
+	IPlane plane(a, n);
+	plane.findClosestIntersection(ray, hit);
+	if (hit.t != FLT_MAX && !inside(hit.interceptPt)) {
+		hit.t = FLT_MAX;
+	}
+}
+
+/**
+* @fn bool ITriangle::inside(const dvec3 &pt) const
+* @brief Insides the given point
+* @param pt The point.
+* @return true iff the point is inside the triangle.
+*/
+
+bool ITriangle::inside(const dvec3& pt) const {
+	// Fill this in with the area method
+	return false;
+}

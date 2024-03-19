@@ -50,7 +50,8 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 		//	firstShape.findClosestIntersection(ray, hit);
 			if (hit.t != FLT_MAX) {
 				//hit.material = firstVisibleShape.material;
-				color C = hit.material.diffuse;
+				color C = theScene.lights[0]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), false);
+				//color C = hit.material.diffuse;
 				frameBuffer.setColor(x, y, C);
 			}
 			else {
