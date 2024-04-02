@@ -164,6 +164,14 @@ bool PositionalLight::pointIsInAShadow(const dvec3& intercept,
 	const vector<VisibleIShapePtr>& objects,
 	const Frame& eyeFrame) const {
 	/* CSE 386 - todo  */
+	Ray sf = getShadowFeeler(intercept, normal, eyeFrame);
+	OpaqueHitRecord hit;
+	VisibleIShape::findIntersection(sf, objects, hit);
+	
+	if (hit.t != FLT_MAX && hit.t > 0) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -179,8 +187,8 @@ Ray PositionalLight::getShadowFeeler(const dvec3& interceptWorldCoords,
 	const dvec3& normal,
 	const Frame& eyeFrame) const {
 	/* 386 - todo */
-	dvec3 origin(0, 0, 0);
-	dvec3 dir(1, 1, 1);
+	dvec3 origin = interceptWorldCoords + normal * EPSILON;
+	dvec3 dir = glm::normalize(pos - origin);
 	Ray shadowFeeler(origin, dir);
 	return shadowFeeler;
 }

@@ -42,17 +42,19 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 				cout << "";
 			}
 			/* CSE 386 - todo  */
-		//	const VisibleIShape& firstVisibleShape = *theScene.opaqueObjs[0];
-		//	const IShape& firstShape = *firstVisibleShape.shape;
 			Ray ray = camera.getRay(x, y);
 			OpaqueHitRecord hit;
 			VisibleIShape::findIntersection(ray, objs, hit);
-		//	firstShape.findClosestIntersection(ray, hit);
 			if (hit.t != FLT_MAX) {
-				//hit.material = firstVisibleShape.material;
-				color C = theScene.lights[0]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), false);
-				//color C = hit.material.diffuse;
-				frameBuffer.setColor(x, y, C);
+				//color C = theScene.lights[0]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), false);
+				//frameBuffer.setColor(x, y, C);
+
+				color finalColor = black;
+				for (unsigned int i = 0; i < 1; i++) {
+					bool isInShadow = lights[i]->pointIsInAShadow(hit.interceptPt, hit.normal, objs, camera.getFrame());
+					finalColor += lights[i]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), isInShadow);
+				}
+				frameBuffer.setColor(x, y, finalColor);
 			}
 			else {
 				frameBuffer.setColor(x, y, paleGreen);
