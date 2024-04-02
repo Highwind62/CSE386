@@ -851,6 +851,26 @@ void ITriangle::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 */
 
 bool ITriangle::inside(const dvec3& pt) const {
-	// Fill this in with the area method
+	// Using barycentric coordinate algorithm
+	dvec3 n = glm::cross((b - a), (c - a));
+	dvec3 n_a = glm::cross((c - b), (pt - b));
+	dvec3 n_b = glm::cross((a - c), (pt - c));
+	dvec3 n_c = glm::cross((b - a), (pt - a));
+
+	double denum = glm::pow(glm::length(n), 2);
+
+	if (denum == 0) { // The area of triangle is 0, which means triangle does not exist.
+		return false;
+	}
+
+	double alpha = glm::dot(n, n_a) / denum;
+	double beta = glm::dot(n, n_b) / denum;
+	double gamma = glm::dot(n, n_c) / denum;
+
+	if (alpha > 0 && beta > 0 && gamma > 0 &&
+		alpha < 1 && beta < 1 && gamma < 1) {
+		return true;
+	}
+
 	return false;
 }
