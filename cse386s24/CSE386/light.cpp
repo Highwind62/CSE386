@@ -212,7 +212,13 @@ color SpotLight::illuminate(const dvec3& interceptWorldCoords,
 	const Frame& eyeFrame,
 	bool inShadow) const {
 	/* CSE 386 - todo  */
-	return material.diffuse;
+	if (!isInSpotlightCone(pos, spotDir, fov, interceptWorldCoords)) {
+		return black;
+	}
+	else {
+		color c = PositionalLight::illuminate(interceptWorldCoords, normal, material, eyeFrame, inShadow);
+		return c;
+	}
 }
 
 /**
@@ -241,5 +247,13 @@ bool SpotLight::isInSpotlightCone(const dvec3& spotPos,
 	double spotFOV,
 	const dvec3& intercept) {
 	/* CSE 386 - todo  */
-	return false;
+	dvec3 i = glm::normalize(intercept - spotPos);
+	double spotCosine = glm::dot(i, spotDir);
+
+	if (spotCosine > glm::cos(spotFOV / 2)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
