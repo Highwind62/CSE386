@@ -69,6 +69,10 @@ void VisibleIShape::findClosestIntersection(const Ray& ray, OpaqueHitRecord& hit
 	shape->findClosestIntersection(ray, hit);
 	if (hit.t != FLT_MAX) {
 		hit.material = material;
+		hit.texture = texture;
+		if (hit.texture != nullptr) {
+			shape->getTexCoords(hit.interceptPt, hit.u, hit.v);
+		}
 	}
 	//hit.t = FLT_MAX;
 	//hit.interceptPt = ORIGIN3D;
@@ -808,7 +812,11 @@ void ICylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 
 void ICylinderY::getTexCoords(const dvec3& pt, double& u, double& v) const {
 	/* CSE 386 - todo  */
-	u = v = 0.0;
+	dvec2 target = dvec2(pt.z, pt.x);
+	dvec2 reference = dvec2(center.z, center.x);
+	u = map(directionInRadians(center, target), 0, 2 * PI, 0, 1);
+	v = map(pt.y, center.y - length / 2, center.y + length / 2, 0, 1);
+	v = 1.0 - v;
 }
 
 /**

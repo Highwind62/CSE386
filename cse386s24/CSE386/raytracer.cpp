@@ -48,13 +48,20 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 			if (hit.t != FLT_MAX) {
 				//color C = theScene.lights[0]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), false);
 				//frameBuffer.setColor(x, y, C);
-
-				color finalColor = black;
-				for (unsigned int i = 0; i < 1; i++) {
-					bool isInShadow = lights[i]->pointIsInAShadow(hit.interceptPt, hit.normal, objs, camera.getFrame());
-					finalColor += lights[i]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), isInShadow);
+				if (hit.texture != nullptr) {
+					color texel = hit.texture->getPixelUV(hit.u, hit.v);
+					frameBuffer.setColor(x, y, texel);
 				}
-				frameBuffer.setColor(x, y, finalColor);
+				else {
+					color C = theScene.lights[0]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), false);
+					frameBuffer.setColor(x, y, C);
+					//color finalColor = black;
+					//for (unsigned int i = 0; i < 1; i++) {
+					//	bool isInShadow = lights[i]->pointIsInAShadow(hit.interceptPt, hit.normal, objs, camera.getFrame());
+					//	finalColor += lights[i]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), isInShadow);
+					//}
+					//frameBuffer.setColor(x, y, finalColor);
+				}
 			}
 			else {
 				frameBuffer.setColor(x, y, paleGreen);
