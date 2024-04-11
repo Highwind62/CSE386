@@ -812,8 +812,8 @@ void ICylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 
 void ICylinderY::getTexCoords(const dvec3& pt, double& u, double& v) const {
 	/* CSE 386 - todo  */
-	dvec2 target = dvec2(pt.z, pt.x);
-	dvec2 reference = dvec2(center.z, center.x);
+	dvec2 target = dvec2(pt.x, pt.z);
+	dvec2 reference = dvec2(center.x, center.z);
 	u = map(directionInRadians(center, target), 0, 2 * PI, 0, 1);
 	v = map(pt.y, center.y - length / 2, center.y + length / 2, 0, 1);
 	v = 1.0 - v;
