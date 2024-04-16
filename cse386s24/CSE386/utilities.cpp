@@ -625,7 +625,7 @@ dvec3 pointingVector(const dvec3& pt1, const dvec3& pt2) {
 
 dvec3 getRow(const dmat3& mat, int row) {
 	/* CSE 386 - todo  */
-	return dvec3(0, 0, 0);
+	return dvec3(mat[0][row], mat[1][row], mat[2][row]);
 }
 
 /**
