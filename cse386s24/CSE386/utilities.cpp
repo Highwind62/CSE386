@@ -651,7 +651,7 @@ dvec3 getCol(const dmat3& mat, int col) {
 
 bool isInvertible(const dmat3& mat) {
 	/* CSE 386 - todo  */
-	return glm::determinant(mat);
+	return glm::determinant(mat) != 0;
 }
 
 /**
