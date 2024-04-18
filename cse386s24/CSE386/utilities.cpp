@@ -638,7 +638,7 @@ dvec3 getRow(const dmat3& mat, int row) {
 
 dvec3 getCol(const dmat3& mat, int col) {
 	/* CSE 386 - todo  */
-	return dvec3(0, 0, 0);
+	return dvec3(mat[col][0], mat[col][1], mat[col][2]);
 }
 
 /**
@@ -651,7 +651,7 @@ dvec3 getCol(const dmat3& mat, int col) {
 
 bool isInvertible(const dmat3& mat) {
 	/* CSE 386 - todo  */
-	return false;
+	return glm::determinant(mat);
 }
 
 /**
@@ -663,7 +663,11 @@ bool isInvertible(const dmat3& mat) {
 
 dmat3 addMatrices(const vector<dmat3>& M) {
 	/* CSE 386 - todo  */
-	return dmat3(0, 0, 0, 0, 0, 0, 0, 0, 0);
+	dmat3 sum (0, 0, 0, 0, 0, 0, 0, 0, 0);
+	for(auto &mat : M) {
+		sum += mat;
+	}
+	return sum;
 }
 
 /**
@@ -675,7 +679,10 @@ dmat3 addMatrices(const vector<dmat3>& M) {
 
 dmat3 multiplyMatrices(const vector<dmat3>& M) {
 	/* CSE 386 - todo  */
-	dmat3 result;
+	dmat3 result(1, 0, 0, 0, 1, 0, 0, 0, 1);
+	for (auto& mat : M) {
+		result *= mat;
+	}
 	return result;
 }
 
@@ -689,7 +696,9 @@ dmat3 multiplyMatrices(const vector<dmat3>& M) {
 
 dvec3 multiplyMatrixAndVertex(const dmat3& M, const dvec3& x) {
 	/* CSE 386 - todo  */
-	return dvec3(0, 0, 0);
+	return dvec3(glm::dot(getRow(M, 0), x), 
+				 glm::dot(getRow(M, 1), x),
+				 glm::dot(getRow(M, 2), x));
 }
 
 /**
@@ -702,7 +711,8 @@ dvec3 multiplyMatrixAndVertex(const dmat3& M, const dvec3& x) {
 
 dvec3 multiplyMatricesAndVertex(const vector<dmat3>& M, const dvec3& x) {
 	/* CSE 386 - todo  */
-	return dvec3(0, 0, 0);
+	dmat3 result = multiplyMatrices(M);
+	return multiplyMatrixAndVertex(result, x);
 }
 
 /**
@@ -716,6 +726,9 @@ dvec3 multiplyMatricesAndVertex(const vector<dmat3>& M, const dvec3& x) {
 vector<dvec3> multiplyMatrixAndVertices(const dmat3& M, const vector<dvec3>& verts) {
 	/* CSE 386 - todo  */
 	vector<dvec3> result;
+	for (auto& v : verts) {
+		result.push_back(multiplyMatrixAndVertex(M, v));
+	}
 	return result;
 }
 
@@ -730,8 +743,8 @@ vector<dvec3> multiplyMatrixAndVertices(const dmat3& M, const vector<dvec3>& ver
 
 vector<dvec3> multiplyMatricesAndVertices(const vector<dmat3>& M, const vector<dvec3>& verts) {
 	/* CSE 386 - todo  */
-	vector<dvec3> result;
-	return result;
+	dmat3 multi_Mat = multiplyMatrices(M);
+	return multiplyMatrixAndVertices(multi_Mat, verts);
 }
 
 /**
