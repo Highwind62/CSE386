@@ -132,8 +132,7 @@ void doAnimationOfRotationByAngle() {
 void doSquareRotatingAroundOwnAxisAndAroundSun() {
 	static double angleInRads = 0;
 	angleInRads += glm::radians(2.5);
-	dmat3 TM = T(pointOnCircle(dvec2(0, 0),200, angleInRads).x, pointOnCircle(dvec2(0, 0), 200, angleInRads).y);
-	dmat3 TM = T(pointOnCircle(dvec2(0, 0), 200, angleInRads).x, pointOnCircle(dvec2(0, 0), 200, angleInRads).y) * R(angleInRads) * T(-pointOnCircle(dvec2(0, 0), 200, angleInRads).x, -pointOnCircle(dvec2(0, 0), 200, angleInRads).y);
+	dmat3 TM = T(pointOnCircle(dvec2(0, 0),250, angleInRads).x, pointOnCircle(dvec2(0, 0), 250, angleInRads).y) * R(angleInRads * 7);
 	vector<dvec3> square1VerticesTransformed = transformVertices(TM, square1Vertices);
 	drawWirePolygonWithShift(square1VerticesTransformed, red);
 	drawAxisOnWindow(colorBuffer);

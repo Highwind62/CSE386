@@ -31,7 +31,8 @@ RayTracer::RayTracer(const color& defa)
 void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 	const IScene& theScene) const {
 	const RaytracingCamera& camera = *theScene.camera;
-	const vector<VisibleIShapePtr>& objs = theScene.opaqueObjs;
+	const vector<VisibleIShapePtr>& opaqueObjs = theScene.opaqueObjs;
+	const vector<TransparentIShapePtr>& transObjs = theScene.transparentObjs;
 	const vector<LightSourcePtr>& lights = theScene.lights;
 	color defaultColor = frameBuffer.getClearColor();
 
@@ -42,29 +43,46 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 				cout << "";
 			}
 			/* CSE 386 - todo  */
+			// Transparency
 			Ray ray = camera.getRay(x, y);
 			OpaqueHitRecord hit;
-			VisibleIShape::findIntersection(ray, objs, hit);
+			TransparentHitRecord transHit;
+			VisibleIShape::findIntersection(ray, opaqueObjs, hit);
+			TransparentIShape::findIntersection(ray, transObjs, transHit);
+			color source = transHit.transColor;
+
+			// Backface correction and normal negation
+			dvec3 d = glm::normalize(camera.getFrame().origin - hit.interceptPt);
+			if (glm::dot(d, -hit.normal) > 0) {
+				hit.normal = -hit.normal;
+			}
+			//
 			if (hit.t != FLT_MAX) {
-				//color C = theScene.lights[0]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), false);
-				//frameBuffer.setColor(x, y, C);
+				color finalColor = black;
+				for (unsigned int i = 0; i < lights.size(); i++) {
+					bool isInShadow = lights[i]->pointIsInAShadow(hit.interceptPt, hit.normal, opaqueObjs, camera.getFrame());
+					finalColor += lights[i]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), isInShadow);
+				}
+				
 				if (hit.texture != nullptr) {
 					color texel = hit.texture->getPixelUV(hit.u, hit.v);
-					frameBuffer.setColor(x, y, texel);
+					finalColor = 0.5 * finalColor + 0.5 * texel;
 				}
-				else {
-					//color C = theScene.lights[0]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), false);
-					//frameBuffer.setColor(x, y, C);
-					color finalColor = black;
-					for (unsigned int i = 0; i < 1; i++) {
-						bool isInShadow = lights[i]->pointIsInAShadow(hit.interceptPt, hit.normal, objs, camera.getFrame());
-						finalColor += lights[i]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), isInShadow);
-					}
-					frameBuffer.setColor(x, y, finalColor);
+
+				if (transHit.t < hit.t) {
+					finalColor = (1 - transHit.alpha) * finalColor + transHit.alpha * source;
 				}
+
+				frameBuffer.setColor(x, y, finalColor);
 			}
 			else {
-				frameBuffer.setColor(x, y, paleGreen);
+				color background = paleGreen;
+
+				if (transHit.t < hit.t) {
+					background = (1 - transHit.alpha) * background + transHit.alpha * source;
+				}
+
+				frameBuffer.setColor(x, y, background);
 			}
 			frameBuffer.showAxes(x, y, ray, 0.25);			// Displays R/x, G/y, B/z axes
 		}

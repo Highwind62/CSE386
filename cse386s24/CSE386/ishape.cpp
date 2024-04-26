@@ -125,10 +125,16 @@ TransparentIShape::TransparentIShape(IShapePtr shapePtr, const color& C, double 
 
 void TransparentIShape::findClosestIntersection(const Ray& ray, TransparentHitRecord& hit) const {
 	/* 386 - todo */
-	hit.t = FLT_MAX;
-	hit.interceptPt = ORIGIN3D;
-	hit.normal = Y_AXIS;
-	hit.alpha = 1.0;
+	shape->findClosestIntersection(ray, hit);
+	if (hit.t != FLT_MAX) {
+		hit.alpha = alpha;
+		hit.transColor = c;
+	}
+
+	//hit.t = FLT_MAX;
+	//hit.interceptPt = ORIGIN3D;
+	//hit.normal = Y_AXIS;
+	//hit.alpha = 1.0;
 }
 
 /**
@@ -143,8 +149,17 @@ void TransparentIShape::findIntersection(const Ray& ray, const vector<Transparen
 	TransparentHitRecord& theHit) {
 	/* CSE 386 - todo  */
 	theHit.t = FLT_MAX;
-	theHit.interceptPt = ORIGIN3D;
-	theHit.normal = Y_AXIS;
+	for (unsigned int i = 0; i < surfaces.size(); i++) {
+		TransparentHitRecord thisHit;
+		surfaces[i]->findClosestIntersection(ray, thisHit);
+		if (thisHit.t < theHit.t) {
+			theHit = thisHit;
+		}
+	}
+
+	//theHit.t = FLT_MAX;
+	//theHit.interceptPt = ORIGIN3D;
+	//theHit.normal = Y_AXIS;
 }
 
 /**
@@ -814,9 +829,36 @@ void ICylinderY::getTexCoords(const dvec3& pt, double& u, double& v) const {
 	/* CSE 386 - todo  */
 	dvec2 target = dvec2(pt.x, pt.z);
 	dvec2 reference = dvec2(center.x, center.z);
-	u = map(directionInRadians(center, target), 0, 2 * PI, 0, 1);
+	u = map(directionInRadians(reference, target), 0, 2 * PI, 0, 1);
 	v = map(pt.y, center.y - length / 2, center.y + length / 2, 0, 1);
 	v = 1.0 - v;
+}
+
+ICylinderZ::ICylinderZ()
+	: ICylinder(ORIGIN3D, 1.0, 1.0, QuadricParameters::cylinderZQParams(1.0)) {
+}
+
+ICylinderZ::ICylinderZ(const dvec3& pos, double rad, double len)
+	: ICylinder(pos, rad, len, QuadricParameters::cylinderZQParams(rad)) {
+}
+
+void ICylinderZ::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
+	HitRecord hits[2];
+	int numHits = IQuadricSurface::findIntersections(ray, hits);
+
+	double minZ = center.z - length / 2;
+	double maxZ = center.z + length / 2;
+
+	hit.t = FLT_MAX;
+
+	for (int i = 0; i < numHits; i++) {
+		double z = hits[i].interceptPt.z;
+		if (z <= maxZ && z >= minZ) {
+			if (hits[i].t > 0 && hits[i].t < hit.t) {
+				hit = hits[i];
+			}
+		}
+	}
 }
 
 /**

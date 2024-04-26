@@ -19,7 +19,7 @@
 #include "camera.h"
 #include "rasterization.h"
 
-Image im1("usflag.ppm");
+Image im("usflag.ppm");
 
 int currLight = 0;
 double angle = 0.5;
@@ -82,6 +82,9 @@ IEllipsoid* ellipsoid = new IEllipsoid(dvec3(4, 0, 5), dvec3(1, 1, 2.5));
 ICylinderY* cylinderY = new ICylinderY(dvec3(8.0, 3.0, -2.0), 1.5, 3.0);
 IDisk* disk = new IDisk(dvec3(-8,0,10), dvec3(1,0,0), 3);
 
+ITriangle* triangle = new ITriangle(dvec3(3.0, 3.0, -2.0), dvec3(7.0, 3.5, -10.0), dvec3(8.0, -1.0, 2.0));
+ICylinderZ* cylinderZ = new ICylinderZ(dvec3(0.0, 0.0, 9.0), 2.0, 2.5);
+
 void buildScene() {
 	scene.addOpaqueObject(new VisibleIShape(plane, tin));
 	scene.addTransparentObject(new TransparentIShape(clearPlane, red, 0.25));
@@ -89,9 +92,12 @@ void buildScene() {
 	scene.addOpaqueObject(new VisibleIShape(sphere1, silver));
 	scene.addOpaqueObject(new VisibleIShape(ellipsoid, copper));
 
-	scene.addOpaqueObject(new VisibleIShape(cylinderY, gold, &im1));
-	scene.addOpaqueObject(new VisibleIShape(disk, redPlastic));
-		
+	scene.addOpaqueObject(new VisibleIShape(cylinderY, gold, &im));
+	scene.addOpaqueObject(new VisibleIShape(disk, obsidian));
+
+	scene.addOpaqueObject(new VisibleIShape(cylinderZ, emerald));
+	scene.addOpaqueObject(new VisibleIShape(triangle, perl));
+
 	scene.addLight(lights[0]);
 	scene.addLight(lights[1]);
 	lights[1]->isOn = false;
