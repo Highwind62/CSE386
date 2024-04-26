@@ -762,12 +762,19 @@ void IConeY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 	static HitRecord hits[2];
 	int numHits = IQuadricSurface::findIntersections(ray, hits);
 
-	if (numHits == 0) {
-		hit.t = FLT_MAX;
-	} else {
-		hit = hits[0];
+	double minY = center.y - height;
+	double maxY = center.y;
+
+	hit.t = FLT_MAX;
+
+	for (int i = 0; i < numHits; i++) {
+		double y = hits[i].interceptPt.y;
+		if (y <= maxY && y >= minY) {
+			if (hits[i].t > 0 && hits[i].t < hit.t) {
+				hit = hits[i];
+			}
+		}
 	}
-	return;
 }
 
 /**

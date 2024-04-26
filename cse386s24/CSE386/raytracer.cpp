@@ -68,17 +68,18 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 						finalColor += lights[j]->illuminate(hit.interceptPt, hit.normal, hit.material, camera.getFrame(), isInShadow);
 					}
 
+					// Texture
 					if (hit.texture != nullptr) {
 						color texel = hit.texture->getPixelUV(hit.u, hit.v);
 						finalColor = 0.5 * finalColor + 0.5 * texel;
 					}
 
+					// Transparency
 					if (transHit.t < hit.t) {
 						finalColor = (1 - transHit.alpha) * finalColor + transHit.alpha * source;
 					}
 
 					sum += finalColor;
-					// frameBuffer.setColor(x, y, finalColor);
 				}
 				else {
 					color background = paleGreen;
@@ -88,7 +89,6 @@ void RayTracer::raytraceScene(FrameBuffer& frameBuffer, int depth,
 					}
 
 					sum += background;
-					// frameBuffer.setColor(x, y, background);
 				}
 			}
 			frameBuffer.setColor(x, y, sum / glm::pow(N, 2));

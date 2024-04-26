@@ -84,6 +84,7 @@ IDisk* disk = new IDisk(dvec3(-8,0,10), dvec3(1,0,0), 3);
 ITriangle* triangle = new ITriangle(dvec3(3.0, 3.0, -2.0), dvec3(7.0, 3.5, -10.0), dvec3(8.0, -1.0, 2.0));
 ICylinderZ* cylinderZ = new ICylinderZ(dvec3(0.0, 0.0, 9.0), 2.0, 2.5);
 IClosedCylinderY* closedCylinderY = new IClosedCylinderY(dvec3(4.5, 3.5, 5.0), 1.0, 2.0);
+IConeY* cone = new IConeY(dvec3(-2.5, 8.0, 5.5), 2.5, 6.0);
 
 void buildScene() {
 	scene.addOpaqueObject(new VisibleIShape(plane, tin));
@@ -92,12 +93,12 @@ void buildScene() {
 	scene.addOpaqueObject(new VisibleIShape(sphere, brass));
 
 	scene.addOpaqueObject(new VisibleIShape(cylinderY, gold, &im));
-	scene.addOpaqueObject(new VisibleIShape(disk, obsidian));
+	scene.addOpaqueObject(new VisibleIShape(disk, turquoise));
 
 	scene.addOpaqueObject(new VisibleIShape(cylinderZ, emerald));
 	scene.addOpaqueObject(new VisibleIShape(triangle, perl));
 	scene.addOpaqueObject(new VisibleIShape(closedCylinderY, chrome));
-
+	scene.addOpaqueObject(new VisibleIShape(cone, redPlastic));
 
 	scene.addLight(lights[0]);
 	scene.addLight(lights[1]);
