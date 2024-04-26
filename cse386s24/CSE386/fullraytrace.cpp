@@ -62,7 +62,7 @@ void render() {
 	frameBuffer.clearColorBuffer();
 
 	scene.camera = new PerspectiveCamera(cameraPos, cameraFocus, cameraUp, cameraFOV, width, height);
-	rayTrace.raytraceScene(frameBuffer, 0, scene);
+	rayTrace.raytraceScene(frameBuffer, 0, scene, antiAliasing);
 
 	frameBuffer.showColorBuffer();
 	int frameEndTime = glutGet(GLUT_ELAPSED_TIME); // Get end time
@@ -77,26 +77,27 @@ void resize(int width, int height) {
 
 IPlane* plane = new IPlane(dvec3(0.0, -2.0, 0.0), dvec3(0.0, 1.0, 0.0));
 IPlane* clearPlane = new IPlane(dvec3(0.0, 0.0, -MAX), dvec3(0.0, 0.0, 1.0));
-ISphere* sphere1 = new ISphere(dvec3(0.0, 0.0, 0.0), 4.0);
-IEllipsoid* ellipsoid = new IEllipsoid(dvec3(4, 0, 5), dvec3(1, 1, 2.5));
+ISphere* sphere = new ISphere(dvec3(-1.0, 3.0, -1.0), 4.0);
 ICylinderY* cylinderY = new ICylinderY(dvec3(8.0, 3.0, -2.0), 1.5, 3.0);
 IDisk* disk = new IDisk(dvec3(-8,0,10), dvec3(1,0,0), 3);
 
 ITriangle* triangle = new ITriangle(dvec3(3.0, 3.0, -2.0), dvec3(7.0, 3.5, -10.0), dvec3(8.0, -1.0, 2.0));
 ICylinderZ* cylinderZ = new ICylinderZ(dvec3(0.0, 0.0, 9.0), 2.0, 2.5);
+IClosedCylinderY* closedCylinderY = new IClosedCylinderY(dvec3(4.5, 3.5, 5.0), 1.0, 2.0);
 
 void buildScene() {
 	scene.addOpaqueObject(new VisibleIShape(plane, tin));
 	scene.addTransparentObject(new TransparentIShape(clearPlane, red, 0.25));
 		 
-	scene.addOpaqueObject(new VisibleIShape(sphere1, silver));
-	scene.addOpaqueObject(new VisibleIShape(ellipsoid, copper));
+	scene.addOpaqueObject(new VisibleIShape(sphere, brass));
 
 	scene.addOpaqueObject(new VisibleIShape(cylinderY, gold, &im));
 	scene.addOpaqueObject(new VisibleIShape(disk, obsidian));
 
 	scene.addOpaqueObject(new VisibleIShape(cylinderZ, emerald));
 	scene.addOpaqueObject(new VisibleIShape(triangle, perl));
+	scene.addOpaqueObject(new VisibleIShape(closedCylinderY, chrome));
+
 
 	scene.addLight(lights[0]);
 	scene.addLight(lights[1]);

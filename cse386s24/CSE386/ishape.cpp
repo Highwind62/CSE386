@@ -834,6 +834,10 @@ void ICylinderY::getTexCoords(const dvec3& pt, double& u, double& v) const {
 	v = 1.0 - v;
 }
 
+/**
+* Cylinder along z-axis
+ */
+
 ICylinderZ::ICylinderZ()
 	: ICylinder(ORIGIN3D, 1.0, 1.0, QuadricParameters::cylinderZQParams(1.0)) {
 }
@@ -861,6 +865,29 @@ void ICylinderZ::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
 	}
 }
 
+/**
+* Closed Cylinder Y
+ */
+
+IClosedCylinderY::IClosedCylinderY(const dvec3& pos, double rad, double len)
+	: ICylinderY(pos, rad, len), 
+	top(dvec3(pos.x, pos.y + len / 2, pos.z), dvec3(0, 1, 0), rad),
+	bottom(dvec3(pos.x, pos.y - len / 2, pos.z), dvec3(0, -1, 0), rad) {
+}
+
+void IClosedCylinderY::findClosestIntersection(const Ray& ray, HitRecord& hit) const {
+	HitRecord hits[3];
+	ICylinderY::findClosestIntersection(ray, hits[0]);
+	top.findClosestIntersection(ray, hits[1]);
+	bottom.findClosestIntersection(ray, hits[2]);
+
+	hit.t = FLT_MAX;
+	for (int i = 0; i < 3; i++) {
+		if (hits[i].t < hit.t) {
+			hit = hits[i];
+		}
+	}
+}
 /**
  * @fn	IEllipsoid::IEllipsoid(const dvec3 &position, const dvec3 &sz)
  * @brief	Constructs an implicit representation of an ellipsoid.

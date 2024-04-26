@@ -213,7 +213,12 @@ struct ICylinderZ : public ICylinder {
 	ICylinderZ();
 	ICylinderZ(const dvec3& position, double R, double len);
 	virtual void findClosestIntersection(const Ray& ray, HitRecord& hit) const;
-	// void getTexCoords(const dvec3& pt, double& u, double& v) const;
+};
+
+struct IClosedCylinderY : public ICylinderY {
+	IClosedCylinderY(const dvec3& position, double R, double len);
+	virtual void findClosestIntersection(const Ray& ray, HitRecord& hit) const;
+	IDisk top, bottom;
 };
 
 /**

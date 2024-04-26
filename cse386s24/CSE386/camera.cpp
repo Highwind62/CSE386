@@ -90,11 +90,26 @@ OrthographicCamera::OrthographicCamera(const dvec3& pos, const dvec3& lookAtPt, 
  * @return	Projection plane coordinates.
  */
 
-dvec2 RaytracingCamera::getProjectionPlaneCoordinates(double x, double y) const {
-	dvec2 s;
-	s.x = map(x + 0.5, 0, nx, left, right);
-	s.y = map(y + 0.5, 0, ny, bottom, top);
-	return s;
+//dvec2 RaytracingCamera::getProjectionPlaneCoordinates(double x, double y) const {
+//	dvec2 s;
+//	s.x = map(x + 0.5, 0, nx, left, right);
+//	s.y = map(y + 0.5, 0, ny, bottom, top);
+//	return s;
+//}
+
+vector<dvec2> RaytracingCamera::getProjectionPlaneCoordinates(double x, double y, int N) const {
+	vector<dvec2> coordinates;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			dvec2 s;
+			double u = x + 1.0 / (2 * N) + i * (1.0 / N);
+			double v = y + 1.0 / (2 * N) + j * (1.0 / N);
+			s.x = map(u, 0, nx, left, right);
+			s.y = map(v, 0, ny, bottom, top);
+			coordinates.push_back(s);
+		}
+	}
+	return coordinates;
 }
 
 /**
@@ -151,9 +166,13 @@ void OrthographicCamera::setupViewingParameters(int W, int H) {
  * @return	The ray through the projection plane at (x, y), in direction -w.
  */
 
-Ray OrthographicCamera::getRay(double x, double y) const {
-	dvec2 uv = getProjectionPlaneCoordinates(x, y);
-	return Ray(cameraFrame.origin + uv.x * cameraFrame.u + uv.y * cameraFrame.v, -cameraFrame.w);
+vector<Ray> OrthographicCamera::getRay(double x, double y, int N) const {
+	vector<Ray> rays;
+	vector<dvec2> uv = getProjectionPlaneCoordinates(x, y, N);
+	for (int i = 0; i < uv.size(); i++) {
+		rays.push_back(Ray(cameraFrame.origin + uv[i].x * cameraFrame.u + uv[i].y * cameraFrame.v, -cameraFrame.w));
+	}
+	return rays;
 }
 
 /**
@@ -164,12 +183,24 @@ Ray OrthographicCamera::getRay(double x, double y) const {
  * @return	The ray eminating from camera through the projection plane at (x, y).
  */
 
-Ray PerspectiveCamera::getRay(double x, double y) const {
-	dvec2 uv = getProjectionPlaneCoordinates(x, y);
-	dvec3 rayDirection = glm::normalize(-distToPlane * cameraFrame.w +
-		uv.x * cameraFrame.u +
-		uv.y * cameraFrame.v);
-	return Ray(cameraFrame.origin, rayDirection);
+//Ray PerspectiveCamera::getRay(double x, double y) const {
+//	dvec2 uv = getProjectionPlaneCoordinates(x, y);
+//	dvec3 rayDirection = glm::normalize(-distToPlane * cameraFrame.w +
+//		uv.x * cameraFrame.u +
+//		uv.y * cameraFrame.v);
+//	return Ray(cameraFrame.origin, rayDirection);
+//}
+
+vector<Ray> PerspectiveCamera::getRay(double x, double y, int N) const {
+	vector<Ray> rays;
+	vector<dvec2> uv = getProjectionPlaneCoordinates(x, y, N);
+	for (int i = 0; i < uv.size(); i++) {
+		dvec3 rayDirection = glm::normalize(-distToPlane * cameraFrame.w +
+			uv[i].x * cameraFrame.u +
+			uv[i].y * cameraFrame.v);
+		rays.push_back(Ray(cameraFrame.origin, rayDirection));
+	}
+	return rays;
 }
 
 /**
