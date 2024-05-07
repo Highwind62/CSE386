@@ -78,12 +78,15 @@ color FragmentOps::applyBlending(double alpha, const color& srcColor, const colo
  										const Frame &eyeFrame) {
  	const dvec3 &eyePos = eyePositionInWorldCoords;
  
- 	double Z = fragment.windowPos.z;
+ 	double newZ = fragment.windowPos.z;
  	int X = (int)fragment.windowPos.x;
  	int Y = (int)fragment.windowPos.y;
  	DEBUG_PIXEL = (X == xDebug && Y == yDebug);
-
-	color C = fragment.material.diffuse;
-	frameBuffer.setColor(X, Y, C);
-	frameBuffer.setDepth(X, Y, Z);
+	
+	double currZ = frameBuffer.getDepth(X, Y);
+	if (newZ < currZ) {
+		color C = lights[0]->illuminate(fragment.worldPos, fragment.worldNormal, fragment.material, eyeFrame, false);
+		frameBuffer.setColor(X, Y, C);
+		frameBuffer.setDepth(X, Y, newZ);
+	}
  }
