@@ -72,7 +72,7 @@ color FragmentOps::applyBlending(double alpha, const color& srcColor, const colo
  * @param           eyeFrame                    The camera's frame.
  */
 
- void FragmentOps::processFragment(FrameBuffer &frameBuffer, const dvec3 &eyePositionInWorldCoords,
+ /*void FragmentOps::processFragment(FrameBuffer &frameBuffer, const dvec3 &eyePositionInWorldCoords,
  										const vector<LightSourcePtr> lights,
  										const Fragment &fragment,
  										const Frame &eyeFrame) {
@@ -89,4 +89,27 @@ color FragmentOps::applyBlending(double alpha, const color& srcColor, const colo
 		frameBuffer.setColor(X, Y, C);
 		frameBuffer.setDepth(X, Y, newZ);
 	}
- }
+ }*/
+
+void FragmentOps::processFragment(FrameBuffer& frameBuffer, const dvec3& eyePositionInWorldCoords,
+	const vector<LightSourcePtr> lights,
+	const Fragment& fragment,
+	const Frame& eyeFrame) {
+	const dvec3& eyePos = eyePositionInWorldCoords;
+
+	double Z = fragment.windowPos.z;
+	int X = (int)fragment.windowPos.x;
+	int Y = (int)fragment.windowPos.y;
+	double oldZ = frameBuffer.getDepth(X, Y);
+	bool passDepthTest = !performDepthTest || Z < oldZ;
+
+	if (passDepthTest) {
+		color result = fragment.material.ambient;
+		if (!readonlyColorBuffer) {
+			frameBuffer.setColor(X, Y, result);
+		}
+		if (!readonlyDepthBuffer) {
+			frameBuffer.setDepth(X, Y, Z);
+		}
+	}
+}
